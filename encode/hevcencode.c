@@ -1655,9 +1655,9 @@ void encoding2display_order(
         *displaying_order = encoding_order - 1;
     } else if ((intra_period != 0) && /* have I frames */
                (encoding_order_gop >= 2) &&
-               ((ip_period == 1 && encoding_order_gop % (intra_period - 1) == 0) || /* for IDR PPPPP IPPPP */
+               ((ip_period == 1 && encoding_order_gop % (intra_period) == 0) || /* for IDR PPPPP IPPPP */
                 /* for IDR (PBB)(PBB)(IBB) */
-                (ip_period >= 2 && ((encoding_order_gop - 1) / ip_period % ((intra_period - 1) / ip_period)) == 0))) {
+                (ip_period >= 2 && ((encoding_order_gop - 1) / ip_period % ((intra_period) / ip_period)) == 0))) {
         *frame_type = FRAME_I;
         *displaying_order = encoding_order + ip_period - 1;
     } else {
@@ -3202,8 +3202,9 @@ static int encode_frames(void)
             render_sequence(&sps);
             render_packedvideo();
             render_packedsequence();
+                    render_packedpicture();
         }
-        render_packedpicture();
+
         render_picture(&pps);
         fill_slice_header(0, &pps, &ssh);
         render_slice();
